@@ -75,18 +75,23 @@ app.get("/:customListName", async function (req, res) {
     const find = await List.findOne({ name: customlistname }).exec();
 
     if (!find) {
-
-        const list = new List({
-            name: customlistname,
-            item: defaultitems
-        });
-        list.save();
-        const newbie = await List.findOne({ name: customlistname }).exec();
-        res.redirect("/" + customlistname);
-
-    } else {
-        res.render("list", { kindofDay: find.name, newListItems: find.item });
-    }
+        if(customlistname === "Ads.txt" ){
+            res.sendFile("/ads.txt")
+        }else if ( customlistname === "robots.txt "){
+             res.sendFile("/robots.txt")
+        } else {
+                const list = new List({
+                    name: customlistname,
+                    item: defaultitems
+                });
+                list.save();
+                const newbie = await List.findOne({ name: customlistname }).exec();
+                res.redirect("/" + customlistname);
+        }
+        
+            } else {
+                res.render("list", { kindofDay: find.name, newListItems: find.item });
+            }
 
 
 
